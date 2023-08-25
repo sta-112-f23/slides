@@ -1,0 +1,491 @@
+---
+title: "Welcome to Introduction to Regression and Data Science"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/favicon.png"
+editor: source
+format: 
+  revealjs: 
+    theme: [custom.scss]
+    transition: fade
+    slide-number: true
+    chalkboard: true
+---
+
+
+
+#  Lucy D'Agostino McGowan
+
+```{r child = "setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(countdown)
+```
+
+
+{{< fa envelope >}} &nbsp; [mcgowald@wfu.edu](mailto:mcgowald@wfu.edu) <br>
+{{< fa calendar >}} &nbsp; Monday 11:00a-12:00p <br>
+{{< fa link >}} &nbsp; [bit.ly/lucystats-office-hours](https://bit.ly/lucystats-office-hours)
+
+
+# [bit.ly/sta-112-f23](http://bit.ly/sta-112-f23) 
+
+# data = model + error
+
+# $y = f(\mathbf{X}) + \epsilon$ 
+
+. . .
+
+::: {.larger}
+`r emo::ji("speaking_head")` math speak 
+:::
+
+
+# $y = \color{green}{f(\mathbf{X})} + \epsilon$ 
+
+
+::: {.larger}
+model 
+:::
+
+# $y = f(\color{green}{\mathbf{X}}) + \epsilon$ 
+
+::: {.larger}
+data (to build the model) 
+:::
+
+
+# $\color{green}y = f(\mathbf{X}) + \epsilon$ 
+
+
+::: {.larger}
+data (outcome) 
+:::
+
+# $y = \color{green}{\beta_0 + \beta_1X
+ }+ \epsilon$ 
+
+::: {.larger}
+simple linear regression
+:::
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+::: {.column width="50%"}
+:::
+
+::::
+
+::: {.small}
+Bob at Easel from  [Wikipedia](https://en.wikipedia.org/wiki/File:Bob_at_Easel.jpg)
+:::
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+
+::: {.column width="50%"}
+
+```{r}
+#| label: plot-1
+#| cache: true
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-height: 6
+library(fivethirtyeight)
+
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  theme_classic()
+```
+:::
+
+::::
+
+::: {.small}
+Data: [FiveThirtyEight](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/)
+
+:::
+
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+
+::: {.column width="50%"}
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+#| label: plot-2
+#| cache: true
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-height: 6
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  geom_smooth(method = "lm") +
+  theme_classic()
+```
+:::
+
+::::
+
+. . . 
+
+::: {.small}
+$y = \color{green}{\beta_0 + \beta_1X}+ \epsilon$ 
+:::
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+
+::: {.column width="50%"}
+
+```{r}
+#| label: plot-3
+#| cache: true
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-height: 6
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  geom_smooth(method = "lm") +
+  theme_classic()
+```
+:::
+
+::::
+
+::: {.small}
+$\text{# of paintings with clouds} = \color{green}{\beta_0 + \beta_1 season}+ \epsilon$
+:::
+
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+
+::: {.column width="50%"}
+
+```{r}
+#| label: plot-4
+#| cache: true
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-height: 6
+bob_ross %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
+  theme_classic()
+```
+:::
+
+::::
+
+##
+
+:::: {.columns}
+
+
+::: {.column width="50%"}
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg){width="450" height="550"}
+:::
+
+
+::: {.column width="50%"}
+
+```{r}
+#| label: plot-5
+#| cache: true
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-height: 6
+bob_ross %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
+  geom_smooth(method = "loess") +
+  theme_classic()
+```
+:::
+
+::::
+
+. . .
+
+::: {.small}
+$\text{# of paintings with clouds} = \color{green}{\beta_0 + \boldsymbol\beta f(season)}+ \epsilon$
+:::
+
+
+# $\tiny y = \color{green}{\beta_0 + \beta_1X_1 + \beta_2X_2+...}+ \epsilon$
+
+. . . 
+
+::: {.larger}
+multiple linear regression
+:::
+
+# $\tiny\color{green}{f(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...$ {.smaller}
+
+# $\tiny\color{green}{logit(P(y = 1))} = \beta_0 + \beta_1X_1 + \beta_2X_2+...$
+
+::: {.larger}
+logistic regression
+:::
+
+# Plan 
+
+::: {.incremental}
+- Thinking about, visualizing, and wrangling data
+- Simple Linear Regression
+- Multiple Linear Regression
+- Logistic Regression
+:::
+
+# Let's go!
+
+## Login to RStudio Pro {.smaller}
+
+- **Note:** if you are off campus, you will need to use a [VPN to connect](https://is.wfu.edu/services/vpn/)
+- Go to [rstudio.deac.wfu.edu](rstudio.deac.wfu.edu)
+
+
+![](img/01/rstudio-pro.png){width="1000" height="350"}
+
+## RStudio Pro Setup
+
+**Step 1: Create a New Project**
+
+Click File > New Project
+
+![](img/01/new-project.png)
+
+## RStudio Pro Setup
+
+**Step 2: Click "Version Control"**
+
+Click the third option.
+
+![](img/01/version-control.png)
+
+## RStudio Pro Setup
+
+**Step 3: Click Git**
+
+Click the first option
+
+![](img/01/git.png)
+
+## RStudio Pro Setup
+
+**Step 4: Copy my starter files**
+
+Paste this link in the top box (`Repository url`):
+
+`https://github.com/sta-112-f23/appex-01-welcome-penguins.git`
+
+![](img/01/paste-link.png)
+
+## {{< fa laptop >}} `Penguin fun!` {.smaller}
+
+- Once you log on to RStudio Pro, create a new project from version control (Git)
+- Paste `https://github.com/sta-112-f23/appex-01-welcome-penguins.git` in the Repository url box
+- Find the file pane (on the bottom right). Click the `welcome-penguins.qmd` file
+- Click the "Render" button
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and render again.
+- Then, scroll to the `plot` chunk, below **Palmer Penguins**. Instead of looking at the relationship between flipper length and bill length, plot the relationship between flipper length and bill **depth**. _Hint, look at the full dataset at the bottom of the document for variable names, update the captions to match your new plot_. 
+- Render again & voila!
+
+```{r}
+#| echo: false
+#| cache: false
+countdown(minutes = 8, font_size = "1.5em")
+```
+
+
+## Let's take a tour - class website
+
+- Concepts introduced:
+  - How to find slides
+  - How to find assignments
+  - How to find RStudio Pro
+  - How to get help
+  - How to find policies
+---
+
+## {{< fa laptop >}} `Practice annotating slides`
+
+- Click on "Schedule" on the top right
+- Click the first {{< fa laptop >}} under the "notes" column
+- Click "Load Hypothesis in a new window"
+- Find this slide
+- Add an annotation
+
+# Course structure and policies
+
+## Class meetings
+
+- Interactive
+- Some lectures, lots of learn-by-doing
+- Bring your laptop to class every day
+
+
+
+## Diversity & Inclusiveness: {.smaller}
+
+- Intent: Students from all diverse backgrounds and perspectives be well-served by this course, that students' learning needs be addressed both in and out of class, and that the diversity that the students bring to this class be viewed as a resource, strength and benefit. It is my intent to present materials and activities that are respectful of diversity: gender identity, sexuality, disability, age, socioeconomic status, ethnicity, race, nationality, religion, and culture. Let me know ways to improve the effectiveness of the course for you personally, or for other students or student groups.
+- If you have a name and/or set of pronouns that differ from those that appear in your official Wake Forest records, please let me know!
+
+
+## Diversity & Inclusiveness: 
+
+- If you feel like your performance in the class is being impacted by your experiences outside of class, please don't hesitate to come and talk with me. I want to be a resource for you. If you prefer to speak with someone outside of the course, your academic dean is an excellent resource. 
+- I (like many people) am still in the process of learning about diverse perspectives and identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.
+
+
+## Disability Policy
+
+Students with disabilities who believe that they may need accommodations in the class are encouraged to contact Learning Assistance Center & Disability Services at 336-758-5929 or [lacds@wfu.edu](mailto:lacds@wfu.edu) as soon as possible to better ensure that such accommodations are implemented in a timely fashion. 
+
+
+## How to get help
+
+All course questions can be posted on the Canvas Q&A board
+    
+- This is a place to post your course-related questions. I encourage you to try to answer each other’s questions. 
+- At the end of the semester, I will tally up the total number of questions answered and you can get up to **1 point extra credit on your final grade.**
+- For personal and grade related questions, use email.
+
+
+## How to get help
+
+#### Math & Stats center
+
+* Located in Kirby Hall 117
+* Study sessions
+* Make an appointment: [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
+
+
+## Academic integrity
+
+Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
+
+
+
+## Sharing/reusing code {.smaller}
+
+* There are many online resources for sharing code (for example, StackOverflow) - you **may** use these resources but **must explicitly cite** where you have obtained code (both code you used directly and "paraphrased" code / code used as inspiration). Any reused code that is not explicitly cited will be treated as plagiarism.
+* You **may** discuss the content of assignments with others in this class. If you do so, please acknowledge your collaborator(s) at the top of your assignment, for example: "Collaborators: Gertrude Cox, Florence Nightingale David". Failure to acknowledge collaborators will result in a grade of 0. You **may not** copy code and/or answers **directly** from another student. If you copy someone else's work, both parties will receive a grade of 0.
+* Rather than copying someone else's work, ask for help. You are not alone in this course!
+
+
+
+## Course components:
+
+
+- Application exercises: Usually start in class and finish in teams by the next class period, check/no check
+- Check-ins
+- Lab: start in class
+- Exams: 2 in class midterms
+- Final project: Presentations during the last week of class
+
+
+## Grading
+
+
+| |  
+|----------------------|----------------|  
+Application exercises & Annotations | 5%  
+Midterm 01 | 20%
+Midterm 02 | 20%
+Check-ins | 20%  
+Labs | 20%  
+Final Project | 15%
+
+
+## Late/missed work policy
+
+
+- Late work policy for homework assignments:
+    - late, but within 24 hours of due date/time: -50%
+    - any later: no credit
+- Late work will not be accepted for the final project.
+
+
+## Other policies
+
+- Please refrain from texting or using your computer for anything other than coursework during class.
+- You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
+- Regrade requests must be made within 1 week of when the assignment is returned.
+
+
+## Intros
+
+- name
+- major / intended major
+- what you hope to get out of this class OR fun fact
+
+
+## RStudio Pro
+
+- If you had issues creating your RStudio Pro account, opening the project, or running the analysis, stick around to try it again.
