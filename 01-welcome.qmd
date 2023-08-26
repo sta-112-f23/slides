@@ -479,11 +479,9 @@ Final Project | 15%
 - Regrade requests must be made within 1 week of when the assignment is returned.
 
 
-## Intros
+## Two truths and a lie
 
-- name
-- major / intended major
-- what you hope to get out of this class OR fun fact
+### [bit.ly/sta-112-ae1](https://bit.ly/sta-112-ae1)
 
 
 ## RStudio Pro
