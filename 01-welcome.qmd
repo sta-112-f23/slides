@@ -362,6 +362,9 @@ Paste this link in the top box (`Repository url`):
 countdown(minutes = 8, font_size = "1.5em")
 ```
 
+## Two truths and a lie
+
+### [bit.ly/sta-112-ae1](https://bit.ly/sta-112-ae1)
 
 ## Let's take a tour - class website
 
@@ -477,11 +480,6 @@ Final Project | 15%
 - Please refrain from texting or using your computer for anything other than coursework during class.
 - You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
 - Regrade requests must be made within 1 week of when the assignment is returned.
-
-
-## Two truths and a lie
-
-### [bit.ly/sta-112-ae1](https://bit.ly/sta-112-ae1)
 
 
 ## RStudio Pro
